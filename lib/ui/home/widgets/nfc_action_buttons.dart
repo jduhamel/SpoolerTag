@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,15 +13,12 @@ class NfcActionButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final capability = ref.watch(nfcCapabilityProvider);
-
-    return capability.when(
-      data: (cap) {
-        if (cap != NfcCapability.available) return const SizedBox.shrink();
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
             children: [
               Expanded(
                 child: FilledButton.icon(
@@ -38,10 +37,65 @@ class NfcActionButtons extends ConsumerWidget {
               ),
             ],
           ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () => _previewTag(context, ref),
+            icon: const Icon(Icons.code),
+            label: const Text('Preview Tag Data'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _previewTag(BuildContext context, WidgetRef ref) {
+    final formNotifier = ref.read(spoolFormProvider.notifier);
+    final data = formNotifier.buildOpenSpoolData();
+    final json = const JsonEncoder.withIndent('  ').convert(data.toJson());
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('NDEF Tag Preview'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'MIME type: application/json',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: SelectableText(
+                  json,
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${utf8.encode(jsonEncode(data.toJson())).length} bytes',
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
     );
   }
 

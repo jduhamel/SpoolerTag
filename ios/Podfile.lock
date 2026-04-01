@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - nfc_manager (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - nfc_manager (from `.symlinks/plugins/nfc_manager/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  nfc_manager:
+    :path: ".symlinks/plugins/nfc_manager/ios"
+
+SPEC CHECKSUMS:
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  nfc_manager: d7da7cb781f7744b94df5fe9dbca904ac4a0939e
+
+PODFILE CHECKSUM: 07de65af562856e27e5951c84a3a6721564f5f7f
+
+COCOAPODS: 1.16.2

@@ -11,7 +11,10 @@ final nfcServiceProvider = Provider<NfcService>((ref) => createNfcService());
 
 final nfcCapabilityProvider = FutureProvider<NfcCapability>((ref) async {
   final service = ref.watch(nfcServiceProvider);
-  return service.checkAvailability();
+  final cap = await service.checkAvailability();
+  // ignore: avoid_print
+  print('NFC capability check result: $cap');
+  return cap;
 });
 
 final nfcModeProvider = StateProvider<NfcMode>((ref) => NfcMode.idle);

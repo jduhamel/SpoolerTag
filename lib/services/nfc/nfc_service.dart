@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:spooler_tag/models/nfc_result.dart';
 import 'package:spooler_tag/models/open_spool_data.dart';
-import 'package:spooler_tag/services/nfc/mobile_nfc_service.dart';
+import 'package:spooler_tag/services/nfc/nfc_service_factory.dart'
+    as nfc_factory;
 
 enum NfcCapability { available, disabled, unsupported }
 
@@ -15,16 +14,9 @@ abstract class NfcService {
   Future<void> stopSession();
 }
 
-NfcService createNfcService() {
-  if (kIsWeb) {
-    return _UnsupportedNfcService();
-  }
-  if (defaultTargetPlatform == TargetPlatform.iOS ||
-      defaultTargetPlatform == TargetPlatform.android) {
-    return MobileNfcService();
-  }
-  return _UnsupportedNfcService();
-}
+NfcService createNfcService() => nfc_factory.createPlatformNfcService();
+
+NfcService createUnsupportedNfcService() => _UnsupportedNfcService();
 
 class _UnsupportedNfcService implements NfcService {
   @override

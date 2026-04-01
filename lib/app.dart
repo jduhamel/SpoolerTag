@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/theme.dart';
+import 'models/open_spool_data.dart';
 import 'ui/home/home_screen.dart';
+import 'ui/qr/qr_display_screen.dart';
+import 'ui/qr/qr_scan_screen.dart';
 import 'ui/settings/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -19,13 +22,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/qr/display',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'QR Display'),
+        builder: (context, state) {
+          final data = state.extra! as OpenSpoolData;
+          return QrDisplayScreen(data: data);
+        },
       ),
       GoRoute(
         path: '/qr/scan',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'QR Scan'),
+        builder: (context, state) => const QrScanScreen(),
       ),
     ],
   );
@@ -42,20 +46,6 @@ class SpoolerTagApp extends ConsumerWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       routerConfig: router,
-    );
-  }
-}
-
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(child: Text(title)),
     );
   }
 }

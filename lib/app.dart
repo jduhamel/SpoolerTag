@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'core/theme.dart';
 import 'ui/home/home_screen.dart';
+import 'ui/settings/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -14,8 +15,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Settings'),
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: '/qr/display',
